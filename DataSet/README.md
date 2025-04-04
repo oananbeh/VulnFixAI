@@ -11,6 +11,3 @@
 ### `dataSet_withFixes.csv`: This dataset includes fixes for the vulnerabilities after applying refactoring techniques (TCVR, OSR, and WVR).
 
 ### `VulnFixAI_dataset.csv` : This dataset is in Alpaca format and is used for fine-tuning the VulnFixAI model.
-
-### Apply Refactoring Technique
-Contains the implementation of refactoring techniques (TCVR, OSR, and WVR) and also converts the dataset into Alpaca format.
