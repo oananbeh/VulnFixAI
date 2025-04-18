@@ -37,10 +37,3 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 2. Run the following command:
    ```bash
    npm start
-
-**screenshot**:
-![Alt Text](screenshot/1.png)
-
-![Alt Text](screenshot/2.png)
-
-![Alt Text](screenshot/3.png)
