@@ -23,3 +23,19 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 2. **Run Ollama**: Execute a script using:
    ```bash
    ollama run <script_name>.py
+   
+## Step 2: Run the Backend
+
+1. Open the backend in the intellij IDE.
+2. Change the `application.properties` file and update the following values:
+   ```properties
+   # Ollama Configuration
+   spring.ai.ollama.base-url=${Ollama-URL}// use http://Localhost:11434  if you run it locally
+   spring.ai.ollama.chat.model=${model} // add the model
+   
+## Step 3: Run the Frontend
+
+1. Open a terminal in the root of your project.
+2. Run the following command:
+   ```bash
+   npm start
