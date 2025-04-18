@@ -33,7 +33,7 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
    
 ## Step 3: Run the Frontend
 
-1. Open a terminal in the root of your project.
+1. Open a terminal in the root of frontEnd.
 2. Run the following command:
    ```bash
    npm start
