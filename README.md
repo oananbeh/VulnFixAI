@@ -17,7 +17,7 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 3. **Verify Installation**: Check if Ollama is installed by running:
    ```bash
    ollama --version
-### Running Ollama
+#### Running Ollama
 
 1. **Navigate to Scripts**: Go to the directory containing the scripts or notebooks you want to run.
 2. **Run Ollama**: Execute a script using:
