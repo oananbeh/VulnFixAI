@@ -3,7 +3,9 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 
 - **DataSet Folder**: contain the dataSet use in this study. 
 
-- **Apply Refactoring Technique**: Contains the implementation of refactoring techniques (TCVR, OSR, and WVR) and also converts the dataset into Alpaca format.
+- **Apply Refactoring Technique**: Contains:
+- 1. The implementation of refactoring techniques (TCVR, OSR, and WVR).
+  2. Converts the dataset into Alpaca format.
 
 
 ## How to Run the VulnFixAI Tool
