@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ac80a45-2188-4bb9-8662-86ca70c40eab" name="Changes" comment="VulnFixAI">
-      <change beforePath="$PROJECT_DIR$/../Screen/Screenshot 2025-04-18 at 1.18.09 AM.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/0.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/0.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack.old" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack.old" afterDir="false" />
-    </list>
+    <list default="true" id="9ac80a45-2188-4bb9-8662-86ca70c40eab" name="Changes" comment="VulnFixAI" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -183,7 +178,7 @@
       <workItem from="1744953107009" duration="2614000" />
       <workItem from="1744955782593" duration="32000" />
       <workItem from="1744955905429" duration="547000" />
-      <workItem from="1744956824780" duration="524000" />
+      <workItem from="1744956824780" duration="924000" />
     </task>
     <task id="LOCAL-00001" summary="first Version">
       <option name="closed" value="true" />
