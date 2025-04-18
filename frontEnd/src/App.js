@@ -110,7 +110,7 @@ const App = () => {
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
         <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-2xl font-bold text-center mb-8">
-            Upload Your Java Project
+            VulnFixAI: Upload Your Java Project
           </h1>
           
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
