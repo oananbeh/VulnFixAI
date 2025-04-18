@@ -24,8 +24,7 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 1. **Navigate to Scripts**: Go to the directory containing the scripts or notebooks you want to run.
 2. **Run Ollama**: Execute a script using:
    ```bash
-   ollama run <script_name>.py
-   
+  ollama run <Model Name>   
 ## Step 2: Run the Backend
 
 1. Open the backend in the intellij IDE.
