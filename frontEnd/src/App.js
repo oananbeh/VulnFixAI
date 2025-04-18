@@ -73,36 +73,52 @@ const App = () => {
 
   const getCodeDiff = (content) => {
     const fileLines = content.split('\n');
-    
-    return fileLines.map((line, index) => {
-      const lineNumber = index + 1;
-      let lineType = 'unchanged';
-      let associatedVulnerability = null;
+    // Initialize diff array with basic line info
+    const diff = fileLines.map((line, index) => ({
+      type: 'unchanged',
+      content: line,
+      lineNum: index + 1, // 1-based line number
+      vulnerability: null,
+    }));
 
-      // Iterate through each vulnerability to check for snippet match
-      for (const vulnerability of vulnerabilities) {
-        // Check if the vulnerableCodeSnippet is valid 
-        if (typeof vulnerability.vulnerableCodeSnippet === 'string') {
-          const snippetLines = vulnerability.vulnerableCodeSnippet.split('\n').map(l => l.trim());
-          const trimmedLine = line.trim();
-          
-          // Check if the current line's content matches any line in the snippet AND is not empty
-          if (trimmedLine !== '' && snippetLines.includes(trimmedLine)) {
-            // Mark as vulnerable based ONLY on snippet match
-            lineType = 'vulnerable';
-            associatedVulnerability = vulnerability;
-            break; // Found a match for this line, no need to check other vulnerabilities
+    // Iterate through each vulnerability returned by the API
+    for (const vulnerability of vulnerabilities) {
+      if (typeof vulnerability.vulnerableCodeSnippet === 'string') {
+        const snippetLines = vulnerability.vulnerableCodeSnippet.trim().split('\n');
+        if (snippetLines.length === 0) continue; // Skip if snippet is empty
+
+        // Try to find where the snippet starts in the code
+        for (let i = 0; i <= diff.length - snippetLines.length; i++) {
+          let isMatch = true;
+          // Check if this line and subsequent lines match the snippet lines
+          for (let j = 0; j < snippetLines.length; j++) {
+            // Compare trimmed lines for robustness against whitespace variations
+            if (diff[i + j].content.trim() !== snippetLines[j].trim()) {
+              isMatch = false;
+              break; // Mismatch found, stop checking this sequence
+            }
+          }
+
+          // If all lines of the snippet matched the sequence starting at index i
+          if (isMatch) {
+            // Mark all corresponding lines in the diff array as vulnerable
+            for (let j = 0; j < snippetLines.length; j++) {
+              // Avoid overwriting if a line is already marked by another vulnerability,
+              // unless specific priority logic is needed.
+              if (diff[i + j].type !== 'vulnerable') {
+                 diff[i + j].type = 'vulnerable';
+                 diff[i + j].vulnerability = vulnerability; // Associate the vulnerability details
+              }
+            }
+            // Found a match for this vulnerability, move to the next one.
+            // Remove 'break' if a single snippet could appear multiple times in the file.
+            break;
           }
         }
       }
-      
-      return {
-        type: lineType,
-        content: line,
-        lineNum: lineNumber,
-        vulnerability: associatedVulnerability // Pass the specific vulnerability if found
-      };
-    });
+    }
+
+    return diff;
   };
 
   if (!isUploaded) {
