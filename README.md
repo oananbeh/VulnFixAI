@@ -14,3 +14,12 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 2. Install the required dependencies for Ollama using pip. Run the following command in your terminal or command prompt:
    ```bash
    pip install ollama
+3. **Verify Installation**: Check if Ollama is installed by running:
+   ```bash
+   ollama --version
+## Running Ollama
+
+1. **Navigate to Scripts**: Go to the directory containing the scripts or notebooks you want to run.
+2. **Run Ollama**: Execute a script using:
+   ```bash
+   ollama run <script_name>.py
