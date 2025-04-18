@@ -4,44 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ac80a45-2188-4bb9-8662-86ca70c40eab" name="Changes" comment="VulnFixAI">
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/167b5a6a0e29d70103bd17c3f8ab63d7522b677fceefa4900305c4a3fe6b8357.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/3206559fdaa9fa99438f97f55ea3b83b528ed83f1fe68c55a7a68171ab508a8d.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/371f9e806ea5bbd1b32ecf2d129355d3dbfb35f895d92bc674ea85628eb3b319.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/449750a04ce72bd7c6207c40b7945e8fd40dadbc7c02baf1be7f289761019a29.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/4af5f7ca41c3128b3836fba13861457c4f569f8f82d7007641d05d6368e92218.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/52522ad72e9c96d33a35af3741900d849f58ebbaca32e4c8707b11272dd035c8.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/6f1440307f3712a1a860d096cfa43d6676b0766a82f059e906768fa9058bd591.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/959125d5c85463d93b4b2017487a69dfc187584409f49d05cc840bd1203793a1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/d0b3f0b120f87d1d67995ae02516f2dc7092abf03a122979677079c7051be415.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/d3ce66b9884cbd9fac700b7c6fd29d86be374762b71cabd526498e32ff984caf.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/e7ec59c120721a75cd282bbdfaa103c774a1af3d7c95e0636bc9dd1d9cffb507.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/babel-loader/efeacf7331bd6b81c2650ddaf1d92b4844b91452d5a9413775cc6eb632a023c7.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/obie/VulInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/obie/VulInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/obie/VulnerabilityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/obie/VulnerabilityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dev/obie/VulInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dev/obie/VulInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dev/obie/VulnerabilityController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dev/obie/VulnerabilityController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dev/obie/VulnerabilityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dev/obie/VulnerabilityController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/0.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/0.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/1.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/1.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/10.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/10.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/11.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/11.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/12.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/12.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/2.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/2.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/3.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/3.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/4.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/4.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/5.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/5.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/6.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/6.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/7.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/7.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/8.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/8.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/9.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/9.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack.old" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/node_modules/.cache/default-development/index.pack.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontEnd/src/CodeReviewComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontEnd/src/CodeReviewComponent.js" afterDir="false" />
-    </list>
+    <list default="true" id="9ac80a45-2188-4bb9-8662-86ca70c40eab" name="Changes" comment="VulnFixAI" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -215,7 +178,7 @@
       <workItem from="1744953107009" duration="2614000" />
       <workItem from="1744955782593" duration="32000" />
       <workItem from="1744955905429" duration="547000" />
-      <workItem from="1744956824780" duration="6161000" />
+      <workItem from="1744956824780" duration="6468000" />
     </task>
     <task id="LOCAL-00001" summary="first Version">
       <option name="closed" value="true" />
