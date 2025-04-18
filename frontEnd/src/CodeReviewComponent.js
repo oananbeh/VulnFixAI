@@ -29,38 +29,36 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
 
   const applyFix = (lineNumber, vulnerableCode, fixCode, vulnerability) => {
     setCodeDiff(prevDiff => {
-      return prevDiff.map(line => {
-        if (line.lineNum === lineNumber && line.content.includes(vulnerableCode.trim())) {
-          // Split the fix code into lines and get the first line
-          const fixLines = fixCode.trim().split('\n');
-          
-          if (fixLines.length === 1) {
-            // Simple single-line replacement
-            const newContent = line.content.replace(vulnerableCode.trim(), fixCode.trim());
-            return { ...line, content: newContent, type: 'fixed' };
-          } else {
-            // For multi-line fixes, we'll need to splice in the new lines
-            const updatedLines = fixLines.map((fixLine, index) => ({
-              content: fixLine,
-              lineNum: (parseInt(lineNumber) + index).toString(),
-              type: 'fixed'
-            }));
-            return updatedLines[0];
-          }
+      const lineIndex = prevDiff.findIndex(line => line.lineNum === lineNumber);
+      if (lineIndex === -1) return prevDiff;
+
+      const originalLine = prevDiff[lineIndex];
+      const trimmedVulnerableCode = typeof vulnerableCode === 'string' ? vulnerableCode.trim() : '';
+
+      if (originalLine.content.includes(trimmedVulnerableCode)) {
+        const fixLines = typeof fixCode === 'string' ? fixCode.trim().split('\n') : [];
+
+        if (fixLines.length === 1) {
+          const newContent = originalLine.content.replace(trimmedVulnerableCode, fixLines[0]);
+          const updatedDiff = [...prevDiff];
+          updatedDiff[lineIndex] = { ...originalLine, content: newContent, type: 'fixed' };
+          return updatedDiff;
+        } else if (fixLines.length > 1) {
+          const newContent = originalLine.content.replace(trimmedVulnerableCode, fixLines[0]);
+          const updatedDiff = [...prevDiff];
+          updatedDiff[lineIndex] = { ...originalLine, content: newContent, type: 'fixed' };
+          return updatedDiff;
         }
-        return line;
-      });
+      }
+      return prevDiff;
     });
 
-    // Add the line number to fixedLines set
     setFixedLines(prev => new Set([...prev, lineNumber]));
-    
-    // Remove the fixed vulnerability from the list
+
     setVulnerabilities(prev => 
-      prev.filter(v => v.vulnerable_code !== vulnerability.vulnerable_code)
+      prev.filter(v => v.vulnerableCodeSnippet !== vulnerability.vulnerableCodeSnippet)
     );
 
-    // Close the tooltip after applying the fix
     setShowTooltip(null);
   };
 
@@ -82,19 +80,9 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
     }));
   };
 
-  const getLineColor = (type, content, lineNum) => {
-    // If the line has been fixed, show it in green
+  const getLineColor = (type, lineNum) => {
     if (type === 'fixed' || fixedLines.has(lineNum)) {
       return 'bg-green-100';
-    }
-
-    // Check if this line contains vulnerable code
-    const isVulnerable = vulnerabilities.some(v => 
-      content.includes(v.vulnerable_code.trim())
-    );
-
-    if (isVulnerable) {
-      return 'bg-red-100';
     }
 
     switch (type) {
@@ -122,19 +110,13 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
       
       <div className="font-mono text-sm">
         {codeDiff.map((line, index) => {
-          const isVulnerable = vulnerabilities.some(v => 
-            line.content.includes(v.vulnerable_code.trim())
-          );
-
-          const lineVulnerabilities = vulnerabilities.filter(v => 
-            line.content.includes(v.vulnerable_code.trim())
-          );
-
-          const isFixed = fixedLines.has(line.lineNum);
+          const isVulnerable = line.type === 'vulnerable'; 
+          const isFixed = line.type === 'fixed' || fixedLines.has(line.lineNum);
+          const lineVulnerability = line.vulnerability; 
 
           return (
             <div key={index} className="relative group">
-              <div className={`flex ${getLineColor(line.type, line.content, line.lineNum)} hover:bg-gray-50`}>
+              <div className={`flex ${getLineColor(line.type, line.lineNum)} hover:bg-gray-50`}>
                 <div className="w-12 text-gray-500 text-right pr-4 select-none">
                   {line.lineNum}
                 </div>
@@ -166,42 +148,38 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
                 </div>
               </div>
 
-              {/* Vulnerability Tooltip */}
-              {showTooltip === line.lineNum && lineVulnerabilities.length > 0 && (
+              {showTooltip === line.lineNum && lineVulnerability && (
                 <div className="ml-12 mt-1 p-3 bg-white shadow-lg rounded border border-red-200 z-10">
-                  {lineVulnerabilities.map((v, i) => (
-                    <div key={i} className="text-sm mb-4 last:mb-0">
-                      <div className="flex items-start justify-between">
-                        <p className="font-semibold text-red-600">{v.cwe_id}</p>
-                        <button 
-                          onClick={() => setShowTooltip(null)}
-                          className="text-gray-400 hover:text-gray-600"
+                  <div className="text-sm mb-4 last:mb-0">
+                    <div className="flex items-start justify-between">
+                      <p className="font-semibold text-red-600">{lineVulnerability.cweIdentifier || lineVulnerability.cwe_id}</p> 
+                      <button 
+                        onClick={() => setShowTooltip(null)}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <p className="mt-1 text-gray-700">{lineVulnerability.vulnerabilityDescription || lineVulnerability.description}</p>
+                    <div className="mt-3 bg-gray-50 p-3 rounded">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="font-semibold text-gray-700">Suggested fix:</p>
+                        <button
+                          onClick={() => applyFix(line.lineNum, lineVulnerability.vulnerableCodeSnippet, lineVulnerability.fixedCodeSnippet, lineVulnerability)}
+                          className="flex items-center gap-1 px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs"
                         >
-                          <X size={16} />
+                          <Check size={12} />
+                          Apply Fix
                         </button>
                       </div>
-                      <p className="mt-1 text-gray-700">{v.description}</p>
-                      <div className="mt-3 bg-gray-50 p-3 rounded">
-                        <div className="flex items-center justify-between mb-2">
-                          <p className="font-semibold text-gray-700">Suggested fix:</p>
-                          <button
-                            onClick={() => applyFix(line.lineNum, v.vulnerable_code, v.fix_vulnerable_code, v)}
-                            className="flex items-center gap-1 px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs"
-                          >
-                            <Check size={12} />
-                            Apply Fix
-                          </button>
-                        </div>
-                        <pre className="p-2 bg-white rounded text-xs whitespace-pre-wrap border border-gray-200">
-                          {v.fix_vulnerable_code}
-                        </pre>
-                      </div>
+                      <pre className="p-2 bg-white rounded text-xs whitespace-pre-wrap border border-gray-200">
+                        {lineVulnerability.fixedCodeSnippet || lineVulnerability.fix_vulnerable_code}
+                      </pre>
                     </div>
-                  ))}
+                  </div>
                 </div>
               )}
 
-              {/* Comments Section */}
               {comments[line.lineNum]?.map(comment => (
                 <div key={comment.id} className="ml-12 p-2 border-l-2 border-blue-200 bg-blue-50 mt-1">
                   <div className="flex justify-between items-start">
@@ -230,7 +208,6 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
                 </div>
               ))}
 
-              {/* Add Comment Form */}
               {showAddComment === line.lineNum && (
                 <div className="ml-12 p-2 border-l-2 border-blue-200 bg-blue-50 mt-1">
                   <textarea

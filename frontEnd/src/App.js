@@ -72,15 +72,35 @@ const App = () => {
   };
 
   const getCodeDiff = (content) => {
-    return content.split('\n').map((line, index) => {
+    const fileLines = content.split('\n');
+    
+    return fileLines.map((line, index) => {
       const lineNumber = index + 1;
-      const vulnerability = vulnerabilities.find(v => parseInt(v.line_number) === lineNumber);
+      let lineType = 'unchanged';
+      let associatedVulnerability = null;
+
+      // Iterate through each vulnerability to check for snippet match
+      for (const vulnerability of vulnerabilities) {
+        // Check if the vulnerableCodeSnippet is valid 
+        if (typeof vulnerability.vulnerableCodeSnippet === 'string') {
+          const snippetLines = vulnerability.vulnerableCodeSnippet.split('\n').map(l => l.trim());
+          const trimmedLine = line.trim();
+          
+          // Check if the current line's content matches any line in the snippet AND is not empty
+          if (trimmedLine !== '' && snippetLines.includes(trimmedLine)) {
+            // Mark as vulnerable based ONLY on snippet match
+            lineType = 'vulnerable';
+            associatedVulnerability = vulnerability;
+            break; // Found a match for this line, no need to check other vulnerabilities
+          }
+        }
+      }
       
       return {
-        type: vulnerability ? 'vulnerable' : 'unchanged',
+        type: lineType,
         content: line,
         lineNum: lineNumber,
-        vulnerability: vulnerability
+        vulnerability: associatedVulnerability // Pass the specific vulnerability if found
       };
     });
   };
