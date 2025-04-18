@@ -29,32 +29,63 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
 
   const applyFix = (lineNumber, vulnerableCode, fixCode, vulnerability) => {
     setCodeDiff(prevDiff => {
-      const lineIndex = prevDiff.findIndex(line => line.lineNum === lineNumber);
-      if (lineIndex === -1) return prevDiff;
+      const vulnerableLines = (vulnerableCode || '').trim().split('\n');
+      const fixedLinesContent = (fixCode || '').trim().split('\n');
+      const numVulnerableLines = vulnerableLines.length;
 
-      const originalLine = prevDiff[lineIndex];
-      const trimmedVulnerableCode = typeof vulnerableCode === 'string' ? vulnerableCode.trim() : '';
+      // Find the index of the first line of the vulnerability
+      const startIndex = prevDiff.findIndex(line => line.lineNum === lineNumber);
 
-      if (originalLine.content.includes(trimmedVulnerableCode)) {
-        const fixLines = typeof fixCode === 'string' ? fixCode.trim().split('\n') : [];
+      if (startIndex === -1 || numVulnerableLines === 0) {
+        console.error("Could not find starting line or vulnerable code is empty.");
+        return prevDiff; // Cannot apply fix if start line not found or snippet empty
+      }
 
-        if (fixLines.length === 1) {
-          const newContent = originalLine.content.replace(trimmedVulnerableCode, fixLines[0]);
-          const updatedDiff = [...prevDiff];
-          updatedDiff[lineIndex] = { ...originalLine, content: newContent, type: 'fixed' };
-          return updatedDiff;
-        } else if (fixLines.length > 1) {
-          const newContent = originalLine.content.replace(trimmedVulnerableCode, fixLines[0]);
-          const updatedDiff = [...prevDiff];
-          updatedDiff[lineIndex] = { ...originalLine, content: newContent, type: 'fixed' };
-          return updatedDiff;
+      // Verify that the subsequent lines actually match the vulnerable snippet
+      let actualMatch = true;
+      for (let i = 0; i < numVulnerableLines; i++) {
+        if (startIndex + i >= prevDiff.length || prevDiff[startIndex + i].content.trim() !== vulnerableLines[i].trim()) {
+          actualMatch = false;
+          console.error(`Mismatch found at line index ${startIndex + i} while verifying vulnerable snippet.`);
+          break;
         }
       }
-      return prevDiff;
+
+      if (!actualMatch) {
+         console.error("Vulnerable code snippet in the diff does not match the expected snippet.");
+         // Optionally, try a simpler single-line replacement as a fallback?
+         // Or just return prevDiff
+         return prevDiff;
+      }
+
+      // Create the new lines based on the fixed code snippet
+      const newLines = fixedLinesContent.map((content, index) => ({
+        // Line numbers will be adjusted later
+        type: 'fixed',
+        content: content,
+        lineNum: -1, // Placeholder
+        vulnerability: null, // Fixed lines don't have associated vulnerability
+      }));
+
+      // Construct the new diff array
+      const updatedDiff = [
+        ...prevDiff.slice(0, startIndex),
+        ...newLines,
+        ...prevDiff.slice(startIndex + numVulnerableLines)
+      ];
+
+      // Renumber lines after the modification
+      let currentLineNum = 1;
+      const finalDiff = updatedDiff.map(line => {
+        const updatedLine = { ...line, lineNum: currentLineNum };
+        currentLineNum++;
+        return updatedLine;
+      });
+
+      return finalDiff;
     });
 
-    setFixedLines(prev => new Set([...prev, lineNumber]));
-
+    // Remove the specific vulnerability instance from the list
     setVulnerabilities(prev => 
       prev.filter(v => v.vulnerableCodeSnippet !== vulnerability.vulnerableCodeSnippet)
     );
@@ -99,12 +130,21 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
 
   return (
     <div className="w-full bg-white rounded-lg shadow">
-      <div className="mb-4 p-2 bg-gray-100 rounded-t">
+      <div className="mb-4 p-4 bg-gray-100 rounded-t">
         <h2 className="text-lg font-semibold">Code Review</h2>
         {vulnerabilities.length > 0 && (
-          <p className="text-sm text-red-600 mt-1">
-            {vulnerabilities.length} vulnerability{vulnerabilities.length !== 1 ? 'ies' : ''} found
-          </p>
+          <div className="mt-2">
+            <p className="text-sm text-red-600 font-medium">
+              {vulnerabilities.length} vulnerability{vulnerabilities.length !== 1 ? 'ies' : ''} found:
+            </p>
+            <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+              {vulnerabilities.map((vuln, index) => (
+                <li key={index}>
+                  <span className="font-semibold">{vuln.cweIdentifier}</span>, Severity : {vuln.vulnerabilitySeverity}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
       
@@ -152,7 +192,7 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
                 <div className="ml-12 mt-1 p-3 bg-white shadow-lg rounded border border-red-200 z-10">
                   <div className="text-sm mb-4 last:mb-0">
                     <div className="flex items-start justify-between">
-                      <p className="font-semibold text-red-600">{lineVulnerability.cweIdentifier || lineVulnerability.cwe_id}</p> 
+                      <p className="font-semibold text-red-600">{lineVulnerability.cweIdentifier}</p> 
                       <button 
                         onClick={() => setShowTooltip(null)}
                         className="text-gray-400 hover:text-gray-600"
@@ -160,7 +200,7 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
                         <X size={16} />
                       </button>
                     </div>
-                    <p className="mt-1 text-gray-700">{lineVulnerability.vulnerabilityDescription || lineVulnerability.description}</p>
+                    <p className="mt-1 text-gray-700">{lineVulnerability.vulnerabilityDescription}</p>
                     <div className="mt-3 bg-gray-50 p-3 rounded">
                       <div className="flex items-center justify-between mb-2">
                         <p className="font-semibold text-gray-700">Suggested fix:</p>
@@ -173,7 +213,7 @@ const CodeReviewComponent = ({ codeDiff: initialCodeDiff, vulnerabilities: initi
                         </button>
                       </div>
                       <pre className="p-2 bg-white rounded text-xs whitespace-pre-wrap border border-gray-200">
-                        {lineVulnerability.fixedCodeSnippet || lineVulnerability.fix_vulnerable_code}
+                        {lineVulnerability.fixedCodeSnippet}
                       </pre>
                     </div>
                   </div>

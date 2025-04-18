@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+
 /**
  * @Author: Obieda Ananbeh
  * @Date 10/27/24
@@ -14,30 +17,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VulInfo {
-    private String cweIdentifier;
-    private String vulnerabilityName;
+    private List<String> cweIdentifier;
     private String vulnerabilitySeverity;
     private String vulnerableCodeSnippet;
-    private VulnerabilityLineNumber vulnerabilityLineNumber;
-    private String vulnerableClassName;
-    private String vulnerableMethodName;
     private String vulnerabilityDescription;
     private String fixedCodeSnippet;
-    private FixLocationLineNumber fixAreaLocation;
 
     @Override
     public String toString() {
         return "VulInfo{" +
-                "cweIdentifier='" + cweIdentifier + '\'' +
-                ", vulnerabilityName='" + vulnerabilityName + '\'' +
+                 "cweIdentifier='" + cweIdentifier + '\'' +
                 ", vulnerabilitySeverity='" + vulnerabilitySeverity + '\'' +
                 ", vulnerableCodeSnippet='" + vulnerableCodeSnippet + '\'' +
-                ", vulnerabilityLineNumber=" + vulnerabilityLineNumber +
-                ", vulnerableClassName='" + vulnerableClassName + '\'' +
-                ", vulnerableMethodName='" + vulnerableMethodName + '\'' +
                 ", vulnerabilityDescription='" + vulnerabilityDescription + '\'' +
-                ", fixedCodeSnippet='" + fixedCodeSnippet + '\'' +
-                ", fixAreaLocation=" + fixAreaLocation +
+                ", fixedCodeSnippet='" + fixedCodeSnippet +
                 '}';
     }
 }
