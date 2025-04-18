@@ -37,3 +37,5 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 2. Run the following command:
    ```bash
    npm start
+# Citation 
+```bash
