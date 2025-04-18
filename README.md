@@ -21,7 +21,7 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
 
 1. **Open the terminal**: run.
    ```bash
-  ollama run <Model Name>   
+      ollama run <Model Name>   
 ## Step 2: Run the Backend
 
 1. Open the backend in the intellij IDE.
