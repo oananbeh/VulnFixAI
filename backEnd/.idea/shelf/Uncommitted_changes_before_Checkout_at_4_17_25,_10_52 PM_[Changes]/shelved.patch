@@ -1,0 +1,229 @@
+Index: src/main/java/dev/obie/VulInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package dev.obie;\n\nimport lombok.AllArgsConstructor;\nimport lombok.Getter;\nimport lombok.NoArgsConstructor;\nimport lombok.Setter;\n/**\n * @Author: Obieda Ananbeh\n * @Date 10/27/24\n */\n@NoArgsConstructor\n@AllArgsConstructor\n@Getter\n@Setter\npublic class VulInfo {\n\n\n    private String vulnerable_code;\n    private String line_number;\n    private String class_name;\n    private String method_name;\n    private String cwe_id;\n    private String description;\n    private String fix_vulnerable_code;\n    private String fix_location;\n\n    public VulInfo(String vulnerable_code, String line_number, String cwe_id,\n                   String description, String fix_vulnerable_code, String fix_location) {\n        this.vulnerable_code = vulnerable_code;\n        this.line_number = line_number;\n        this.cwe_id = cwe_id;\n        this.description = description;\n        this.fix_vulnerable_code = fix_vulnerable_code;\n        this.fix_location = fix_location;\n    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/dev/obie/VulInfo.java b/src/main/java/dev/obie/VulInfo.java
+--- a/src/main/java/dev/obie/VulInfo.java	(revision d59895ed43b9409dc46bd5f70ae9e1059411037c)
++++ b/src/main/java/dev/obie/VulInfo.java	(date 1744944463595)
+@@ -24,14 +24,5 @@
+     private String fix_vulnerable_code;
+     private String fix_location;
+ 
+-    public VulInfo(String vulnerable_code, String line_number, String cwe_id,
+-                   String description, String fix_vulnerable_code, String fix_location) {
+-        this.vulnerable_code = vulnerable_code;
+-        this.line_number = line_number;
+-        this.cwe_id = cwe_id;
+-        this.description = description;
+-        this.fix_vulnerable_code = fix_vulnerable_code;
+-        this.fix_location = fix_location;
+-    }
+ }
+ 
+Index: src/main/java/dev/obie/VulnerabilityController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package dev.obie;\n\nimport org.springframework.ai.chat.client.ChatClient;\nimport org.springframework.core.ParameterizedTypeReference;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.RequestBody;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\nimport java.util.List;\nimport java.util.Map;\n\n/**\n * @Author: Obieda Ananbeh\n * @Date 10/27/24\n */\n\n@RestController\n@RequestMapping(\"/v2\")\npublic class VulnerabilityController {\n    private final ChatClient chatClient;\n\n    public VulnerabilityController(ChatClient.Builder builder) {\n        String systemPrompt = \"You are a security expert focused on code analysis. Always analyze code systematically:\" +\n                \"\\n1. First identify clear security vulnerabilities like SQL injection, XSS, etc.\" +\n                \"\\n2. Then check for common implementation issues\" +\n                \"\\n3. Focus only on real security issues, not style or performance\" +\n                \"\\n4. Provide specific line numbers and exact code fixes\" +\n                \"\\n5. Use standard CWE IDs\" +\n                \"\\nBe consistent in your analysis.\";\n\n        this.chatClient = builder\n                .defaultSystem(systemPrompt)\n                .build();\n    }\n\n\n    @RequestMapping(\"/vul\")\n    public ResponseEntity<?> vul(@RequestBody Map<String, String> requestBody) {\n        try {\n            String code = requestBody.get(\"code\");\n            if (code == null || code.trim().isEmpty()) {\n                return ResponseEntity.badRequest().body(\"Code parameter is required\");\n            }\n\n            List<VulInfo> vulnerabilities = chatClient.prompt()\n                    .user(u -> u.text(\"\"\"\n                Analyze the following code for vulnerabilities and return the results in JSON format only. \n                If vulnerabilities are found, return an array of objects with these exact fields: \n                vulnerable_code, line_number, class_name, method_name, cwe_id, description, fix_vulnerable_code, fix_location.\n                If no vulnerabilities are found, return an empty array [].\n                Return only the JSON array with no additional text or explanation.\n                Code to analyze: {code}\n                \"\"\").param(\"code\", code))\n                    .call()\n                    .entity(new ParameterizedTypeReference<List<VulInfo>>() {});\n\n            if (vulnerabilities == null || vulnerabilities.isEmpty()) {\n                // Update the response with all fields in the VulInfo object\n                return ResponseEntity.ok(List.of(new VulInfo(\n                        \"Not provided\", \"Not provided\", \"Not provided\",\n                        \"Not provided\", \"No vulnerabilities found\", \"Not provided\",\n                        \"Not provided\", \"Not provided\")));\n            }\n\n            return ResponseEntity.ok(vulnerabilities);\n\n        } catch (Exception e) {\n            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)\n                    .body(\"Error processing request: \" + e.getMessage());\n        }\n    }\n    @RequestMapping(\"/vul2\")\n    public ResponseEntity<?> CEW(@RequestBody Map<String, String> requestBody) {\n\n        String code = requestBody.get(\"code\");\n\n            List<CEW> vulnerabilities = chatClient.prompt()\n                    .user(u -> u.text(\"\"\"\n                Analyze the following code for vulnerabilities and return the results in JSON format only. \n                only on real security issues, not style or performance\" , \n                only consider the following CWE ID [CWE-23 , CWE-918, CWE-319, CWE-134, CWE-502, CWE-113, CWE-501, CWE-470, CWE-601, CWE-78]\n                If vulnerabilities are found, return an array of objects with these exact fields: \n                cwe_id, exact_vulnerable_code, replace_it_with_secure_code.\n                If no vulnerabilities are found, return an empty array [].\n                Return only the JSON array with no additional text or explanation.\n                Code to analyze: {code}\n                \"\"\").param(\"code\", code))\n                    .call()\n                    .entity(new ParameterizedTypeReference<List<CEW>>() {});\n\n            if (vulnerabilities == null || vulnerabilities.isEmpty()) {\n                // Update the response with all fields in the VulInfo object\n                return ResponseEntity.ok(List.of(new CEW(\n                        \"Not provided\", \"Not provided\",\"Not provided\")));\n            }\n\n            return ResponseEntity.ok(vulnerabilities);\n\n    }\n\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/dev/obie/VulnerabilityController.java b/src/main/java/dev/obie/VulnerabilityController.java
+--- a/src/main/java/dev/obie/VulnerabilityController.java	(revision d59895ed43b9409dc46bd5f70ae9e1059411037c)
++++ b/src/main/java/dev/obie/VulnerabilityController.java	(date 1744944306586)
+@@ -71,34 +71,6 @@
+                     .body("Error processing request: " + e.getMessage());
+         }
+     }
+-    @RequestMapping("/vul2")
+-    public ResponseEntity<?> CEW(@RequestBody Map<String, String> requestBody) {
+-
+-        String code = requestBody.get("code");
+-
+-            List<CEW> vulnerabilities = chatClient.prompt()
+-                    .user(u -> u.text("""
+-                Analyze the following code for vulnerabilities and return the results in JSON format only. 
+-                only on real security issues, not style or performance" , 
+-                only consider the following CWE ID [CWE-23 , CWE-918, CWE-319, CWE-134, CWE-502, CWE-113, CWE-501, CWE-470, CWE-601, CWE-78]
+-                If vulnerabilities are found, return an array of objects with these exact fields: 
+-                cwe_id, exact_vulnerable_code, replace_it_with_secure_code.
+-                If no vulnerabilities are found, return an empty array [].
+-                Return only the JSON array with no additional text or explanation.
+-                Code to analyze: {code}
+-                """).param("code", code))
+-                    .call()
+-                    .entity(new ParameterizedTypeReference<List<CEW>>() {});
+-
+-            if (vulnerabilities == null || vulnerabilities.isEmpty()) {
+-                // Update the response with all fields in the VulInfo object
+-                return ResponseEntity.ok(List.of(new CEW(
+-                        "Not provided", "Not provided","Not provided")));
+-            }
+-
+-            return ResponseEntity.ok(vulnerabilities);
+-
+-    }
+ 
+ }
+ 
+Index: src/main/java/dev/obie/ChatController.java
+===================================================================
+diff --git a/src/main/java/dev/obie/ChatController.java b/src/main/java/dev/obie/ChatController.java
+deleted file mode 100644
+--- a/src/main/java/dev/obie/ChatController.java	(revision d59895ed43b9409dc46bd5f70ae9e1059411037c)
++++ /dev/null	(revision d59895ed43b9409dc46bd5f70ae9e1059411037c)
+@@ -1,124 +0,0 @@
+-
+-package dev.obie;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.Data;
+-import lombok.NoArgsConstructor;
+-import org.springframework.ai.chat.client.ChatClient;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-import java.util.ArrayList;
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-@RestController
+-@RequestMapping("/v1")
+-public class ChatController {
+-
+-    private final ChatClient chatClient;
+-
+-    public ChatController(ChatClient.Builder builder) {
+-        this.chatClient = builder.build();
+-    }
+-    @PostMapping("/chat")
+-    public ResponseEntity<Map<String, List<VulnerabilityInfo>>> home(@RequestBody Map<String, String> requestBody) {
+-        String code = requestBody.get("code");
+-
+-        String prompt = String.format(
+-                "Analyze the following code for security vulnerabilities. For each vulnerability found, provide your response in exactly this format:" +
+-                        "\n---" +
+-                        "\nVULNERABLE_CODE: [paste the exact vulnerable code snippet]" +
+-                        "\nLINE_NUMBER: [specific line number where the vulnerability exists]" +
+-                        "\nCWE_ID: [specific CWE identifier, e.g., CWE-89]" +
+-                        "\nDESCRIPTION: [clear explanation of why this is vulnerable]" +
+-                        "\nFIX: [provide the corrected code snippet]" +
+-                        "\nFIX_LOCATION: [line number where to apply the fix]" +
+-                        "\n---" +
+-                        "\n\nRepeat this format for each vulnerability found. Here's the code to analyze:\n\n%s", code);
+-
+-        String aiResponse = chatClient.prompt()
+-                .user(prompt)
+-                .call()
+-                .content();
+-
+-        List<VulnerabilityInfo> vulnerabilities = parseVulnerabilities(aiResponse);
+-        return new ResponseEntity<>(Map.of("response", vulnerabilities), HttpStatus.OK);
+-    }
+-
+-    // POJO to represent vulnerability information
+-    @Data
+-    @NoArgsConstructor
+-    @AllArgsConstructor
+-    static class VulnerabilityInfo {
+-        private int vulnerability;
+-        private String vulnerable_code;
+-        private String line_number;
+-        private String cwe_id;
+-        private String description;
+-        private String fix;
+-        private String fix_location;
+-    }
+-
+-    private List<VulnerabilityInfo> parseVulnerabilities(String aiResponse) {
+-        List<VulnerabilityInfo> vulnerabilities = new ArrayList<>();
+-        String[] sections = aiResponse.split("---");
+-        int vulnerabilityCount = 0;
+-
+-        for (String section : sections) {
+-            if (section.trim().isEmpty()) continue;
+-
+-            vulnerabilityCount++;
+-            Map<String, String> vulnMap = new HashMap<>();
+-
+-            // Extract each field
+-            String[] lines = section.trim().split("\n");
+-            for (String line : lines) {
+-                String[] parts = line.split(":", 2);
+-                if (parts.length == 2) {
+-                    String key = parts[0].trim();
+-                    String value = parts[1].trim();
+-                    vulnMap.put(key, value);
+-                }
+-            }
+-
+-            // Create VulnerabilityInfo object
+-            VulnerabilityInfo vulnInfo = new VulnerabilityInfo(
+-                    vulnerabilityCount,
+-                    getValueOrDefault(vulnMap, "VULNERABLE_CODE"),
+-                    getValueOrDefault(vulnMap, "LINE_NUMBER"),
+-                    getValueOrDefault(vulnMap, "CWE_ID"),
+-                    getValueOrDefault(vulnMap, "DESCRIPTION"),
+-                    getValueOrDefault(vulnMap, "FIX"),
+-                    getValueOrDefault(vulnMap, "FIX_LOCATION")
+-            );
+-
+-            vulnerabilities.add(vulnInfo);
+-        }
+-
+-        // If no vulnerabilities were found, add one with default values
+-        if (vulnerabilities.isEmpty()) {
+-            vulnerabilities.add(new VulnerabilityInfo(
+-                    1,
+-                    "Not provided",
+-                    "Not provided",
+-                    "Not provided",
+-                    "Not provided",
+-                    "Not provided",
+-                    "Not provided"
+-            ));
+-        }
+-
+-        return vulnerabilities;
+-    }
+-
+-    private String getValueOrDefault(Map<String, String> map, String key) {
+-        String value = map.get(key);
+-        if (value == null || value.trim().isEmpty()) {
+-            return "Not provided";
+-        }
+-        return value.trim().replace("[", "").replace("]", "").replace("`", "");
+-    }
+-}
+Index: src/main/java/dev/obie/CEW.java
+===================================================================
+diff --git a/src/main/java/dev/obie/CEW.java b/src/main/java/dev/obie/CEW.java
+deleted file mode 100644
+--- a/src/main/java/dev/obie/CEW.java	(revision d59895ed43b9409dc46bd5f70ae9e1059411037c)
++++ /dev/null	(revision d59895ed43b9409dc46bd5f70ae9e1059411037c)
+@@ -1,21 +0,0 @@
+-package dev.obie;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-import lombok.Setter;
+-
+-/**
+- * @Author: Obieda Ananbeh
+- * @Date 10/29/24
+- */
+-@Getter
+-@Setter
+-@AllArgsConstructor
+-@NoArgsConstructor
+-public class CEW
+-{
+-    String cwe_id;
+-    String exact_vulnerable_code;
+-    String replace_it_with_secure_code;
+-}
