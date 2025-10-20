@@ -1,3 +1,8 @@
 .DS_Store
 .idea
 .mvn
+
+# Datasets (kept local, not in Git)
+Trining DataSet/*.csv
+Trining DataSet/*.json
+
