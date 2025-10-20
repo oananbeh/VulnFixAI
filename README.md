@@ -1,11 +1,26 @@
-# VulnFixAI
-This repository is the replication package of "VulnFixAI: Automated Vulnerability Detection and fix" 
+<div align="center">
+
+# 🛡️ VulnFixAI
+
+[![Java](https://img.shields.io/badge/Java-17-green.svg)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB.svg?logo=react)](https://reactjs.org/)
+[![Ollama](https://img.shields.io/badge/Ollama-AI%20Runtime-orange.svg)](https://ollama.com)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg?logo=python)](https://python.org)
+
+### This repository is the replication package of "VulnFixAI: Automated Vulnerability Detection and fix"
+</div>
+
+---
+
+## 🗂️ Repository Structure
 
 - **Training DataSet**: contain the training dataset used in this study. 
 - **Evaluation-Benchmark**: contain the evaluation benchmark used in this study.
 - **Apply Refactoring Technique**: Contains:
   1. The implementation of refactoring techniques (TCVR, OSR, and WVR).
   2. Converts the dataset into Alpaca format.
+
+---
 
 
 ## How to Run the VulnFixAI Tool
@@ -39,3 +54,20 @@ This repository is the replication package of "VulnFixAI: Automated Vulnerabilit
    npm start
 # Citation 
 ```bash
+
+---
+
+## 🎓 Citation
+
+If you use VulnFixAI in your research, please cite our paper:
+
+```bibtex
+@article{ananbeh2025vulnfixai,
+  title={VulnFixAI: A Novel LLM-Based Approach for Automated Vulnerability Detection and Repair},
+  author={Obieda Ananbeh, Wala Alnozmai, and Dae-Kyoo Kima},
+  journal={},
+  year={2025},
+  publisher={}
+}
+```
+
