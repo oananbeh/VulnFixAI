@@ -10,8 +10,6 @@
 
 ### Replication Package for "A Neuro-Symbolic Framework for Automated Vulnerability Detection and Repair in Java Software"
 
-*Obieda Ananbeh · Wala Alnozmai · Dae-Kyoo Kim*
-
 </div>
 
 ---
@@ -189,3 +187,7 @@ If you use VulnFixAI in your research, please cite:
   publisher = {}
 }
 ```
+
+## License
+
+This project is licensed under the **MIT License** 
