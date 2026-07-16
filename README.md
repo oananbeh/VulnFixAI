@@ -250,18 +250,6 @@ If you use VulnFixAI in your research, please cite:
 }
 ```
 
-This work builds on the refactoring techniques introduced in:
-
-```bibtex
-@article{ananbeh2025refactoring,
-  title   = {Refactoring Techniques for Software Vulnerabilities},
-  author  = {Ananbeh, O. and Alnozami, W. and Kim, D.-K. and Ming, H. and Zhou, M.},
-  journal = {SSRN},
-  number  = {5208112},
-  year    = {2025}
-}
-```
-
 ## License
 
 This project is licensed under the **MIT License** 
